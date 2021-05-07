@@ -3,8 +3,19 @@ package com.zrk.util;
 
 public class Result {
 
+    /**
+     * 服务器状态码
+     */
     private Integer status;
+
+    /**
+     * 服务信息
+     */
     private String message;
+
+    /**
+     * 数据
+     */
     private Object data;
 
     public Result() {
@@ -23,8 +34,8 @@ public class Result {
     public static Result seccuss(){
         return Result.seccuss("请求成功");
     }
-    public static Result seccuss(String message){
-        return Result.seccuss(message,null);
+    public static Result seccuss(Object data){
+        return Result.seccuss("请求成功",data);
     }
     public static Result seccuss(String message,Object data){
         return new Result(200,message,data);

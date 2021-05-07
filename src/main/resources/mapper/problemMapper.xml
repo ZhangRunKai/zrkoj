@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zrk.mapper.ProblemMapper">
+
+    <resultMap id="problem" type="com.zrk.entity.Problem">
+        <result property="problemId" column="problem_id"/>
+        <result property="problemTitle" column="problem_title"/>
+        <result property="problemAuthor" column="problem_author"/>
+        <result property="problemContext" column="problem_context"/>
+        <result property="problemTimeLimited" column="problem_time_limited"/>
+        <result property="problemSpaceLimited" column="problem_space_limited"/>
+        <result property="problemPower" column="problem_power"/>
+        <result property="problemDegree" column="problem_degree"/>
+        <result property="problemNum" column="problem_num"/>
+        <result property="problemAccept" column="problem_accept"/>
+        <result property="problemSimpleInput" column="problem_simple_input"/>
+        <result property="problemSimpleOutput" column="problem_simple_output"/>
+        <collection property="labels" ofType="com.zrk.entity.Label">
+            <id property="labelId" column="label_id"/>
+            <result property="labelName" column="label_name"/>
+        </collection>
+    </resultMap>
+
+    <select id="findAll" resultMap="problem">
+        select p.*,x.label_id, x.label_name from oj_problem p left join (select l.*,pl.problem_id from oj_label l join problem_label pl on l.label_id = pl.label_id where pl.problem_id) x
+                                                                        on x.problem_id=p.problem_id
+    </select>
+</mapper>

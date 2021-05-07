@@ -6,6 +6,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RequestIntercept implements HandlerInterceptor {
 
@@ -13,12 +15,13 @@ public class RequestIntercept implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String header = request.getHeader(JWTUtil.TOKEN_HEADER);
-        System.out.println("拦截器1");
-        if(header==null){
-            System.out.println("“header为空");
+
+        String token = request.getHeader(JWTUtil.TOKEN_HEADER);
+        if(token==null){
             return false;
         }
+        HashMap<String, Integer> hashMap = JWTUtil.VerifierToken(token);
+        JWTUtil.userManager.set(hashMap);
         return true;
     }
 
@@ -29,7 +32,7 @@ public class RequestIntercept implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-
+        JWTUtil.userManager.remove();
     }
 }
 
