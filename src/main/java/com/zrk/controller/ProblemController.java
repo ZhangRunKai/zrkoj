@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zrk.entity.Label;
 import com.zrk.entity.Problem;
 import com.zrk.service.ProblemServlet;
+import com.zrk.util.JWTUtil;
 import com.zrk.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +26,9 @@ public class ProblemController {
 
     @RequestMapping("/add")
     public Result addProblem(@RequestBody Problem problem){
-        if(Problem.checkEntity(problem)){
+        if(problem!=null){
+            Integer userId = JWTUtil.userManager.get().get(JWTUtil.USERID);
+            problem.setUserId(userId);
             Integer add = problemServlet.add(problem);
             if(add!=null&&add==1)
                 return Result.seccuss();
@@ -45,5 +48,10 @@ public class ProblemController {
         return Result.seccuss(problemServlet.find(problem));
     }
 
+
+    @RequestMapping("/findPrivate")
+    public Result findProblemByPrivate(@RequestBody Page page){
+        return Result.seccuss(problemServlet.findProblemByPrivate(page));
+    }
 
 }

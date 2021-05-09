@@ -1,5 +1,6 @@
 package com.zrk.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zrk.entity.Contest;
 import com.zrk.entity.User;
@@ -27,12 +28,18 @@ public class ContestController {
 
     @RequestMapping("/createContest")
     public Result createContest(@RequestBody Contest contest){
+        if (contest == null || contest.getContestBegin() == null || contest.getContestEnd() == null ||
+            contest.getContestEnd().before(contest.getContestBegin()) || (contest.getIsPrivate().equals("1") && contest.getExamPassword().equals(""))){
+            return Result.errorParams();
+        }
         HashMap<String, Integer> hashMap = JWTUtil.userManager.get();
 
         //权限校验
         if(!User.hasCreateContest(hashMap.get(JWTUtil.ROLEPOWER)))
             return Result.errorRequest("用户无权限创建比赛");
-        if(contestServlet.createContest(contest)) return Result.seccuss();
+        contest.setUserId(hashMap.get(JWTUtil.USERID));
+        if(contestServlet.createContest(contest).equals(1))
+            return Result.seccuss();
         return Result.errorRequest("创建失败，请重试");
     }
 
@@ -40,8 +47,8 @@ public class ContestController {
     @RequestMapping("/findContestByCreate")
     public Result findContestByCreate(@RequestBody Page page){
         Integer userId = JWTUtil.userManager.get().get(JWTUtil.USERID);
-        contestServlet.findAllByCreate(userId,page);
-        return null;
+        IPage<Contest> allByCreate = contestServlet.findAllByCreate(userId, page);
+        return Result.seccuss(allByCreate);
     }
 
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
@@ -72,13 +73,24 @@ public class Contest {
     private String examPassword;
 
     /**
+     * 比赛状态
+     * 0：创建状态
+     * 1：发布
+     * 2：报名截止
+     * 3：废除
+     * 4：删除
+     */
+    private Integer contestStatus;
+
+    /**
+     * 报名截止时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date joinEnd;
+
+    /**
      * 比赛的题目
      */
     @TableField(exist = false)
-    private List<Problem> problems;
-
-    /**
-     * 比赛版本
-     */
-    private Integer version;
+    private List<ContestProblem> problems;
 }

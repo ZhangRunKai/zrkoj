@@ -17,7 +17,7 @@ public class JWTUtil{
     private static final String SECRET = "XX#$%()(#*!(sadsadsadqwe)!KL<><\\ED5944B6F54D2DF4967615C7D59AE70E>?N<:{LWPW";
     public static final String TOKEN_HEADER = "authentication";
     private static final Algorithm ALGORITHM = Algorithm.HMAC256(SECRET);
-    private static final Long EXPIRES = 15*24*60*60L;
+    private static final Long EXPIRES = 15*24*60*60*1000L;
     private static final JWTVerifier build = JWT.require(ALGORITHM).build();
 
     public static final String USERID = "userId";

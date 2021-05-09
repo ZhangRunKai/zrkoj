@@ -25,6 +25,8 @@ public class Problem {
     @TableId(value = "problem_id", type = IdType.AUTO)
     private Integer problemId;
 
+    private Integer userId;
+
     /**
      * 题目主键
      */
@@ -38,7 +40,7 @@ public class Problem {
     /**
      * 题目内容
      */
-    private String problemContext;
+    private String problemContent;
 
     /**
      * 题目运行时间限制
@@ -52,16 +54,12 @@ public class Problem {
     /**
      * 题目运行时间限制
      */
-    private String cTimeLimited;
+    private String otherTimeLimited;
 
     /**
      * 题目内存限制
      */
-    private String cSpaceLimited;
-
-    private String problemInput;
-
-    private String problemOutput;
+    private String otherSpaceLimited;
 
     /**
      * 题目权限控制
@@ -85,17 +83,8 @@ public class Problem {
      */
     private Integer problemAccept;
 
-    private String problemSampleInput;
-
-    private String problemSampleOutput;
 
     @TableField(exist = false)
     private List<Label> labels;
 
-    public static boolean checkEntity(Problem problem){
-        if(problem!=null&&problem.getProblemTitle()!=null&&problem.getProblemPower()!=null&&problem.getProblemContext()!=null&&problem.getCSpaceLimited()!=null&&problem.getCTimeLimited()!=null
-                &&problem.getJavaSpaceLimited()!=null&&problem.getJavaTimeLimited()!=null)
-            return true;
-        return false;
-    }
 }

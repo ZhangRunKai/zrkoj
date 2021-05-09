@@ -1,6 +1,8 @@
 package com.zrk.util;
 
 
+import com.baomidou.mybatisplus.extension.api.R;
+
 public class Result {
 
     /**
@@ -48,6 +50,9 @@ public class Result {
         return new Result(403,message,null);
     }
 
+    public static Result errorParams(){
+        return new Result(403,"缺失必要参数",null);
+    }
     public Integer getStatus() {
         return status;
     }

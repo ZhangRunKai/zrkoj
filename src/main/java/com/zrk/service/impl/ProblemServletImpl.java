@@ -10,6 +10,7 @@ import com.zrk.mapper.LabelMapper;
 import com.zrk.mapper.ProblemLabelMapper;
 import com.zrk.mapper.ProblemMapper;
 import com.zrk.service.ProblemServlet;
+import com.zrk.util.JWTUtil;
 import com.zrk.util.OjSqlException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,11 @@ public class ProblemServletImpl implements ProblemServlet {
         return null;
     }
 
+    /**
+     * 分页查询题目
+     * @param page
+     * @return
+     */
     @Override
     public IPage<Problem> findAll(Page page) {
         return problemMapper.selectPage(page, new QueryWrapper<Problem>().eq("problem_power", "0"));
@@ -68,6 +74,12 @@ public class ProblemServletImpl implements ProblemServlet {
     public Problem find(Problem problem) {
         Problem problem1 = problemMapper.selectOne(new QueryWrapper<Problem>().eq("problem_id", problem.getProblemId()).eq("problem_power","0"));
         return problem1;
+    }
+
+    @Override
+    public IPage<Problem> findProblemByPrivate(Page page) {
+        Integer userId = JWTUtil.userManager.get().get(JWTUtil.USERID);
+        return problemMapper.selectPage(page,new QueryWrapper<Problem>().eq("user_id",userId));
     }
 
 }
