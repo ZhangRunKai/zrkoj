@@ -78,7 +78,7 @@ public class ProblemServletImpl implements ProblemServlet {
 
     @Override
     public IPage<Problem> findProblemByPrivate(Page page) {
-        Integer userId = JWTUtil.userManager.get().get(JWTUtil.USERID);
+        Integer userId = Integer.parseInt(JWTUtil.userManager.get().get(JWTUtil.USERID));
         return problemMapper.selectPage(page,new QueryWrapper<Problem>().eq("user_id",userId));
     }
 

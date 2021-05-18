@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JWTUtil{
-    public static ThreadLocal<HashMap<String,Integer>> userManager = new ThreadLocal<>();
+    public static ThreadLocal<HashMap<String,String>> userManager = new ThreadLocal<>();
     private static final String SECRET = "XX#$%()(#*!(sadsadsadqwe)!KL<><\\ED5944B6F54D2DF4967615C7D59AE70E>?N<:{LWPW";
     public static final String TOKEN_HEADER = "authentication";
     private static final Algorithm ALGORITHM = Algorithm.HMAC256(SECRET);
@@ -22,7 +22,7 @@ public class JWTUtil{
 
     public static final String USERID = "userId";
     public static final String ROLEPOWER = "rolePower";
-    public static final String ROLENAME = "roleDescribe";
+    public static final String ROLENAME = "roleName";
     public static final String USERNAME = "userName";
 
     /**
@@ -41,11 +41,13 @@ public class JWTUtil{
     }
 
 
-    public static HashMap<String,Integer> VerifierToken(String token){
+    public static HashMap<String,String> VerifierToken(String token){
         Map<String, Claim> claims = build.verify(token).getClaims();
-        HashMap<String, Integer> hashMap = new HashMap<>();
-        hashMap.put("userId",claims.get(USERID).asInt());
-        hashMap.put("rolePower",claims.get(ROLEPOWER).asInt());
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("userId",claims.get(USERID).asString());
+        hashMap.put("rolePower",claims.get(ROLEPOWER).asString());
+        hashMap.put("userName",claims.get(USERNAME).asString());
+        hashMap.put("roleName",claims.get(ROLENAME).asString());
         return hashMap;
     }
 

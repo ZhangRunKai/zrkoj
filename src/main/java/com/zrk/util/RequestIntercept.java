@@ -20,7 +20,7 @@ public class RequestIntercept implements HandlerInterceptor {
         if(token==null){
             return false;
         }
-        HashMap<String, Integer> hashMap = JWTUtil.VerifierToken(token);
+        HashMap<String, String> hashMap = JWTUtil.VerifierToken(token);
         JWTUtil.userManager.set(hashMap);
         return true;
     }

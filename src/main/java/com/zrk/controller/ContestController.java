@@ -32,12 +32,12 @@ public class ContestController {
             contest.getContestEnd().before(contest.getContestBegin()) || (contest.getIsPrivate().equals("1") && contest.getExamPassword().equals(""))){
             return Result.errorParams();
         }
-        HashMap<String, Integer> hashMap = JWTUtil.userManager.get();
+        HashMap<String, String> hashMap = JWTUtil.userManager.get();
 
         //权限校验
-        if(!User.hasCreateContest(hashMap.get(JWTUtil.ROLEPOWER)))
+        if(!User.hasCreateContest(Integer.getInteger(hashMap.get(JWTUtil.ROLEPOWER))))
             return Result.errorRequest("用户无权限创建比赛");
-        contest.setUserId(hashMap.get(JWTUtil.USERID));
+        contest.setUserId(Integer.getInteger(hashMap.get(JWTUtil.USERID)));
         if(contestServlet.createContest(contest).equals(1))
             return Result.seccuss();
         return Result.errorRequest("创建失败，请重试");
@@ -46,7 +46,7 @@ public class ContestController {
 
     @RequestMapping("/findContestByCreate")
     public Result findContestByCreate(@RequestBody Page page){
-        Integer userId = JWTUtil.userManager.get().get(JWTUtil.USERID);
+        Integer userId = Integer.parseInt(JWTUtil.userManager.get().get(JWTUtil.USERID));
         IPage<Contest> allByCreate = contestServlet.findAllByCreate(userId, page);
         return Result.seccuss(allByCreate);
     }

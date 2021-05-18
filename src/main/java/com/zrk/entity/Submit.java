@@ -10,6 +10,7 @@ import lombok.Data;
 @Data
 public class Submit {
 
+    private Integer problemId;
     /**
      * 1:C
      * 2:C++
@@ -37,6 +38,17 @@ public class Submit {
 
     /**
      * 运行结果
+     * 0'Accepted',
+     *  1   'Presentation Error',
+     *   2  'Time Limit Exceeded',
+     *    3 'Memory Limit Exceeded',
+     *     4'Wrong Answer',
+     *     5'Runtime Error',
+     *     6'Output Limit Exceeded',
+     *     7'Compile Error',
+     *     8'System Error'
+     *     9:queue
+     *     10:judge
      */
     private Integer submitResult;
 

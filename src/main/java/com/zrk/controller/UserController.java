@@ -1,6 +1,7 @@
 package com.zrk.controller;
 
 
+import com.zrk.entity.Role;
 import com.zrk.entity.User;
 import com.zrk.service.UserServlet;
 import com.zrk.util.JWTUtil;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/user")
@@ -41,5 +43,32 @@ public class UserController {
             return Result.errorRequest("注册失败，账号已存在");
         }
         return Result.seccuss();
+    }
+
+    @RequestMapping("/update")
+    public Result update(@RequestBody User user){
+        Integer userId = Integer.getInteger(JWTUtil.userManager.get().get(JWTUtil.USERID));
+        Integer result = null;
+        if (userId == user.getUserId()
+               || Role.canManageRoleAndUser(
+                Integer.getInteger(JWTUtil.userManager.get().get(JWTUtil.ROLEPOWER)))){
+            result = userServlet.updateUser(user);
+            if (result != 0) return Result.seccuss();
+            else return Result.errorRequest("修改失败");
+        }
+        return Result.errorRequest("无权利修改其他人信息");
+    }
+
+    @RequestMapping("updateToken")
+    public Result updateToken(HttpServletResponse response){
+        HashMap<String, String> hashMap = JWTUtil.userManager.get();
+        User user = new User();
+        user.setUserId(Integer.getInteger(hashMap.get(JWTUtil.USERID)));
+        user.setUserName(hashMap.get(JWTUtil.USERNAME));
+        user.setRolePower(Integer.getInteger(hashMap.get(JWTUtil.ROLEPOWER)));
+        user.setRoleName(hashMap.get(JWTUtil.ROLENAME));
+        response.setHeader("Access-Control-Expose-Headers",JWTUtil.TOKEN_HEADER);
+        response.setHeader(JWTUtil.TOKEN_HEADER,JWTUtil.createToken(user));
+        return Result.seccuss("自动登陆成功");
     }
 }

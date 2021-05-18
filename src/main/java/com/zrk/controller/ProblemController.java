@@ -24,28 +24,28 @@ public class ProblemController {
     @Autowired
     public ProblemServlet problemServlet;
 
-    @RequestMapping("/add")
-    public Result addProblem(@RequestBody Problem problem){
-        if(problem!=null){
-            Integer userId = JWTUtil.userManager.get().get(JWTUtil.USERID);
-            problem.setUserId(userId);
-            Integer add = problemServlet.add(problem);
-            if(add!=null&&add==1)
-                return Result.seccuss();
-            return Result.errorRequest("创建失败");
-        }
-        return Result.errorRequest("问题条件缺失，无法新建");
-    }
 
-    @RequestMapping("/findAllPublic")
-    public Result addProblem(@RequestBody Page page){
+    @RequestMapping("/findAll")
+    public Result findAll(@RequestBody Page page){
         Page<Problem> problemIPage = (Page<Problem>) problemServlet.findAll(page);
         return Result.seccuss(problemIPage);
     }
 
-    @RequestMapping("/findPublic")
+    @RequestMapping("/find")
     public Result findProblem(@RequestBody Problem problem){
         return Result.seccuss(problemServlet.find(problem));
+    }
+
+    @RequestMapping("/add")
+    public Result add(@RequestBody Problem problem){
+        if(problem != null){
+            Integer userId = Integer.getInteger(JWTUtil.userManager.get().get(JWTUtil.USERID));
+            problem.setUserId(userId);
+            Integer add = problemServlet.add(problem);
+            if(add==1) return Result.seccuss();
+            return Result.errorRequest("创建失败");
+        }
+        return Result.errorRequest("问题条件缺失，无法新建");
     }
 
 
